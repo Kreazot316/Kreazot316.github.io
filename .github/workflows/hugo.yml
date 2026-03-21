@@ -24,17 +24,6 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.14.0
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: pnpm
-
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
@@ -45,11 +34,22 @@ jobs:
           hugo-version: "0.156.0"
           extended: true
 
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm exec hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+        run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
